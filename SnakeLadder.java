@@ -1,75 +1,95 @@
 package com.bl.java;
 
 public class SnakeLadder {
+	static int player = 1;
+	static int player1_position;
+	static int player2_position;
+	static int moveConditions = 0;
 
 	public static void main(String[] args) {
-		int person1_position = 0, person2_position = 0, flag = 0;
-		int diceRollNo = 0;
-		while (person1_position != 100 && person2_position != 100) {
-			diceRollNo++;
-			int dieRoll = 1 + (int) Math.floor(Math.random() * 10) % 6;
-			System.out.println("Die Rolled:" + dieRoll);
+		int dicerolls = SnakeLadder.diceRoll();
+		int dice = 0;
 
-			if (flag == 0) {
-				int checkOption = (int) Math.floor(Math.random() * 10) % 3;
-				if (checkOption == 0) {
-					System.out.println("No Play");
-				} else if (checkOption == 1) {
-					flag = 1;
-					System.out.println("Ladder Comes");
-					if (person1_position + dieRoll <= 100) {
-						person1_position += dieRoll;
+		while (player1_position != 100 && player2_position != 100) {
+			dice++;
+			dicerolls = SnakeLadder.diceRoll();
+			moveConditions = SnakeLadder.moveCondition();
 
-					} else if (person1_position + dieRoll > 100) {
-						continue;
-					}
-				} else {
-					System.out.println("Snake Comes");
-					if ((person1_position - dieRoll) < 0) {
-						person1_position = 0;
-					} else {
-						person1_position -= dieRoll;
-					}
+			System.out.println("******PLAYER******* :- " + player);
+			System.out.println("dice roll " + dicerolls);
+			if (player == 1) {
+				if (moveConditions == 1) {
+					player = 2;
 				}
-				System.out.println(diceRollNo);
-				System.out.println(
-						"Player person1_position After Dice Roll " + person1_position + " " + person2_position);
-				if (person1_position == 100) {
-					System.out.println("persom one win first");
-				}
+				player1_position = SnakeLadder.position(dicerolls, player1_position);
+				System.out.println("person 1 position" + player1_position);
 			} else {
-				int checkOption = (int) Math.floor(Math.random() * 10) % 3;
-				if (checkOption == 0) {
-					System.out.println("No Play");
-				} else if (checkOption == 1) {
-					flag = 0;
-					System.out.println("Ladder Comes");
-					if (person2_position + dieRoll <= 100) {
-						person2_position += dieRoll;
-
-					} else if (person2_position + dieRoll > 100) {
-						continue;
-					}
-				} else {
-					System.out.println("Snake Comes");
-					if ((person2_position - dieRoll) < 0) {
-						person2_position = 0;
-					} else {
-						person2_position -= dieRoll;
-					}
+				if (moveConditions == 1) {
+					player = 1;
 				}
-				System.out.println(diceRollNo);
-				System.out.println("Player Position After Dice Roll " + person1_position + " " + person2_position);
-				if (person2_position == 20) {
-					System.out.println("person two win first");
-				}
+				player2_position = SnakeLadder.position(dicerolls, player2_position);
+				System.out.println("person 2 position" + player2_position);
 			}
-			if (flag == 0) {
-				flag = 1;
+			if (player == 1) {
+				player = 2;
 			} else {
-				flag = 0;
+				player = 1;
 			}
 		}
-		System.out.println("Number Of Dice Roll To Win " + diceRollNo);
+		System.out.println("number of dice  roll " + dice);
+		int win1 = win(player1_position, player2_position);
+
 	}
+
+	public static int diceRoll() {
+		int diceRoll = 1 + (int) Math.floor(Math.random() * 10) % 6;
+		return diceRoll;
+	}
+
+	public static int moveCondition() {
+		int moveCondition = (int) Math.floor(Math.random() * 10) % 3;
+		return moveCondition;
+	}
+
+	public static int position(int dicevalue, int player_position) {
+
+		switch (moveConditions) {
+		case 0:
+			System.out.println("no play " + player_position);
+			break;
+		case 1:
+			if ((player_position + dicevalue) > 100) {
+				break;
+			} else {
+				player_position += dicevalue;
+				System.out.println("ladder" + player_position);
+
+			}
+			break;
+		default:
+			// System.out.println(player1_position);
+			if ((player_position - dicevalue) <= 0) {
+				player_position = 0;
+			} else {
+				player_position -= dicevalue;
+				System.out.println("sanke" + player_position);
+			}
+
+			break;
+		}
+
+		return player_position;
+	}
+
+	public static int win(int player1_position, int playe2_position) {
+		if (player1_position == 100) {
+			System.out.println("player 1 win ");
+
+		} else if (player2_position == 100) {
+			System.out.println("player 2 win");
+
+		}
+		return 0;
+	}
+
 }
